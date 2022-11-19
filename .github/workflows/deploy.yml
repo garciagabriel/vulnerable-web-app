@@ -67,7 +67,7 @@ jobs:
         with:
           node-version: 16
       - name: Run Snyk to check for vulnerabilities
-        run: snyk test --severity-threshold=high --sarif-file-output=snyk-code.sarif
+        run: snyk test --severity-threshold=high --file=package.json --sarif-file-output=snyk-code.sarif
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
