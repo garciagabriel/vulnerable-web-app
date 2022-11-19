@@ -70,6 +70,7 @@ jobs:
         with:
           args: >
             --severity-threshold=high
+            --skip-unresolved
             --all-projects
             --sarif-file-output=snyk-code.sarif
       - name: Upload SARIF file
