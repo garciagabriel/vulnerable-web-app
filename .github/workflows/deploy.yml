@@ -62,17 +62,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - uses: snyk/actions/setup@master
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/node@master
+        run: snyk test --severity-threshold=high --sarif-file-output=snyk-code.sarif
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           DEBUG: "*snyk*"
-        with:
-          args: >
-            --severity-threshold=high
-            --file=package.json
-            --sarif-file-output=snyk-code.sarif
       - name: Upload SARIF file
         #if: always()
         uses: github/codeql-action/upload-sarif@v2
