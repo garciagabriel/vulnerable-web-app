@@ -66,6 +66,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+      - run: npm install          
       - name: Run Snyk to check for vulnerabilities
         run: snyk test --severity-threshold=high --file=package.json --sarif-file-output=snyk-code.sarif
         continue-on-error: true
