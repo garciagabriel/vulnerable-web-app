@@ -10,10 +10,10 @@ jobs:
     uses: ./.github/workflows/sast.yml
     secrets: inherit
   ejecutar-deploy:
-    uses: ./.github/workflows/sast.yml
+    uses: ./.github/workflows/deploy.yml
     needs: ejecutar-sast
     secrets: inherit
   ejecutar-dast:
-    uses: ./.github/workflows/sast.yml
+    uses: ./.github/workflows/dast.yml
     needs: [ejecutar-sast, ejecutar-deploy]
     secrets: inherit
