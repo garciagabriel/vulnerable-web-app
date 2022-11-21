@@ -15,5 +15,5 @@ jobs:
     secrets: inherit
   ejecutar-dast:
     uses: ./.github/workflows/dast.yml
-    needs: [ejecutar-sast, ejecutar-deploy]
+    needs: ejecutar-sast
     secrets: inherit
