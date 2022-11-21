@@ -1,4 +1,4 @@
-name: Workflow SAST
+name: Workflow SAST Estricto
 on:
   workflow_dispatch:
   workflow_call:
