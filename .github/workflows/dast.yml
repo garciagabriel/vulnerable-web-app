@@ -1,0 +1,28 @@
+name: Workflow DAST
+on:
+  workflow_dispatch:
+jobs:
+  hawkscan:
+    name: Ejecucion de HawkScan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v2
+      - name: Run HawkScan
+        uses: stackhawk/hawkscan-action@v2.0.0
+        with:
+          apiKey: ${{ secrets.HAWK_API_KEY }}
+  soos_dast_analysis_example:
+    name: Analisis SOOS - ZAP
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run SOOS DAST Analysis
+        uses: soos-io/soos-dast-github-action@v1.2.3
+        with:
+          client_id: ${{ secrets.SOOS_CLIENT_ID }}
+          api_key: ${{ secrets.SOOS_API_KEY }}
+          project_name: "DAST-GitHub-Action-Test"
+          scan_mode: "baseline"
+          api_url: "https://api.soos.io/api/"
+          target_url: "https://cursodevsecops-gabriel.herokuapp.com/"  
+                  
