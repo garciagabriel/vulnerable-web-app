@@ -1,84 +1,11 @@
-name: CI-CD Aplicacion hackacademy                                  # workflow name
+name: Deploy de la aplicacion
 
 on:
-  push:
-    branches:
-      - master
   workflow_dispatch:
-  
+  workflow_call:
 jobs:
-  gitleaks:
-    name: Gitleaks
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
-        continue-on-error: true        
-  horusec-security:
-    name: Horusec Scan
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v3
-      - name: Run Horusec
-        env:
-          HORUSEC_CLI_RETURN_ERROR_IF_FOUND_VULNERABILITY: "true"
-        id: run_horusec
-        uses: fike/horusec-action@v0.2.2
-        with:
-          arguments: -p ./ --config-file-path=horusec-config.json -O report.txt -o text --return-error=true        
-        continue-on-error: true
-      - name: Current directory
-        run: pwd
-      - name: List directory
-        run: ls
-      - name: Upload  security scan result as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: horusec-report
-          path: report.txt
-  gitguardian:
-    name: GitGuardian Scan
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0 # fetch all history so multiple commits can be scanned          
-      - name: GitGuardian scan
-        uses: GitGuardian/ggshield-action@master
-        env:
-          GITHUB_PUSH_BEFORE_SHA: ${{ github.event.before }}
-          GITHUB_PUSH_BASE_SHA: ${{ github.event.base }}
-          GITHUB_PULL_BASE_SHA:  ${{ github.event.pull_request.base.sha }}
-          GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-          GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
-  snyk:
-    name: Snyk Code
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - uses: snyk/actions/setup@master
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - run: npm install          
-      - name: Run Snyk to check for vulnerabilities
-        run: snyk test --severity-threshold=high --file=package.json --sarif-file-output=snyk-code.sarif
-        continue-on-error: true
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      - name: Upload SARIF file
-        #if: always()
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: snyk-code.sarif 
   deploy-heroku:
-    name: Deploy Heroku
+    name: Se ejecuta deploy Heroku
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

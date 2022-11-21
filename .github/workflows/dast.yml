@@ -1,6 +1,7 @@
 name: Workflow DAST
 on:
   workflow_dispatch:
+  workflow_call:
 jobs:
   hawkscan:
     name: Ejecucion de HawkScan

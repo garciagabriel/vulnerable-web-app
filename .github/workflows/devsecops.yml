@@ -1,0 +1,19 @@
+name: Workflow principal DEVSECOPS EKO - Hackacademy                                  # workflow name
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+jobs:
+  ejecutar-sast:
+    uses: ./.github/workflows/sast.yml
+    secrets: inherit
+  ejecutar-deploy:
+    uses: ./.github/workflows/sast.yml
+    needs: ejecutar-sast
+    secrets: inherit
+  ejecutar-dast:
+    uses: ./.github/workflows/sast.yml
+    needs: [ejecutar-sast, ejecutar-deploy]
+    secrets: inherit
